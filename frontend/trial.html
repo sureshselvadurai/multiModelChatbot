@@ -1,13 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMChatbot Dashboard</title>
-    <!-- Bootstrap CSS -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Multimodal Chatbot</title>
+
+
+
+
+
+
+    <script>
+        // Function to handle the login redirection based on user type (Customer or Company)
+        function handleSignIn() {
+            // Get the selected user type
+
+            const userType = document.querySelector('input[name="userType"]:checked').id;
+            console.log("User Type Selected: ", userType);  // Log the user type (Customer/Company)
+            if (userType==="customer"){
+                document.cookie = `section=section3; path=/; max-age=31536000`;
+                }
+            if (userType==="company"){
+                document.cookie = `section=section2; path=/; max-age=31536000`;
+            }
+        const baseUrl = "https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login";
+        const clientId = "47u7rlvrb9add08pfvu5532f7o"; // App client ID
+        const responseType = "code"; // We are using the authorization code flow
+        const scope = "email+openid+phone"; // Scopes for the authentication
+        const redirectUri = "http://localhost:63342/multiModelChatbot/frontend/trial.html?_ijt=me4agno4edmun0o2nuasknvr69&_ij_reload=RELOAD_ON_SAVE"; // Redirect URI after login
+
+        // Construct the full URL for redirection
+        const loginUrl = `${baseUrl}?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${(redirectUri)}`;
+
+        // Redirect to the login URL
+        window.location.href = loginUrl;
+
+        }
+      function logout() {
+      document.cookie = "section=; path=/; max-age=0"; // Delete the cookie by setting its max-age to 0
+      loadSection(); // Reload the page to reflect the cleared cookie
+    }
+
+    </script>
+
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-btn:hover {
+            background-color: #45a049;
+        }
+        .description {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+
+
+
+
+
+
+
+
+    /* Basic styling to differentiate sections */
+    .section {
+      display: none; /* Hide all sections by default */
+      padding: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+    #section1 {
+      background-color: #f9f9f9;
+    }
+    #section2 {
+      background-color: #e0f7fa;
+    }
+    #section3 {
+      background-color: #f1f8e9;
+    }
+    .button-container {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+
+
+
+
+
+
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fc;
@@ -51,8 +187,70 @@
         }
     </style>
 </head>
-
 <body>
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Section 1 -->
+  <div id="section1" class="section">
+    <header>
+        <h1>Multimodal Chatbot</h1>
+        <p>Provide your product details, and customers can interact with a chatbot for support.</p>
+    </header>
+
+    <div class="container">
+        <h2>Login</h2>
+
+        <!-- User Type Selection (Customer or Company) -->
+        <div class="description">
+            <label><input type="radio" name="userType" id="customer" checked> Customer</label>
+            <label><input type="radio" name="userType" id="company"> Company</label>
+        </div>
+
+        <!-- Sign-In Button -->
+        <div class="button-container">
+            <button class="login-btn" onclick="handleSignIn()">Sign In with Cognito</button>
+        </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Section 2 -->
+  <div id="section2" class="section">
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -423,6 +621,77 @@
             }
         }
     </script>
-</body>
 
+  </div>
+
+  <!-- Section 3 -->
+  <div id="section3" class="section">
+    <h2>Section 3</h2>
+    <p>This is the content from section 3. Yet another piece of content.</p>
+  </div>
+
+  <!-- Buttons to simulate setting cookies -->
+  <div class="button-container">
+    <button onclick="setSectionCookie('section1')">Show Section 1</button>
+    <button onclick="setSectionCookie('section2')">Show Section 2</button>
+    <button onclick="setSectionCookie('section3')">Show Section 3</button>
+  </div>
+    <div class="button-container">
+    <button onclick="logout()">Logout (Clear Cookie)</button>
+  </div>
+
+
+  <script>
+    // Function to set the cookie
+    function setSectionCookie(section) {
+      console.log("Cookie changes to :",section)
+      document.cookie = `section=${section}; path=/; max-age=31536000`; // cookie lasts for 1 year
+       // Reload the page to reflect the cookie change
+    }
+
+    // Function to get the cookie value by name
+    function getCookie(name) {
+      const value = "; " + document.cookie;
+      const parts = value.split("; " + name + "=");
+      if (parts.length === 2) return parts.pop().split(";").shift();
+      return null;
+    }
+
+    // Function to display the section based on the cookie value
+    function loadSection() {
+      const sectionToShow = getCookie('section'); // Read cookie value (e.g., 'section1', 'section2', or 'section3')
+
+      // Hide all sections
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.style.display = 'none';
+      });
+
+      // Show the selected section
+      if (sectionToShow) {
+        const selectedSection = document.getElementById(sectionToShow);
+        if (selectedSection) {
+          selectedSection.style.display = 'block';
+        }
+      } else {
+        // Default behavior if no cookie is set (e.g., show section1)
+        document.getElementById('section1').style.display = 'block';
+      }
+    }
+
+    // Call the loadSection function when the page loads
+    window.onload = loadSection;
+  </script>
+
+</body>
 </html>
+
+http://localhost:63342/multiModelChatbot/frontend/trial.html?_ijt=qhgo1tvi5c5cno0go1dmd85agm&_ij_reload=RELOAD_ON_SAVE&code=da86bbd3-b720-4b6a-b645-96726eee5603
+http://localhost:63342/multiModelChatbot/frontend/trial.html?_ijt=me4agno4edmun0o2nuasknvr69&_ij_reload=RELOAD_ON_SAVE
+https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login?client_id=47u7rlvrb9add08pfvu5532f7o&response_type=code&scope=email+openid+phone&redirect_uri=http://localhost:63342/multiModelChatbot/frontend/trial.html?_ijt=me4agno4edmun0o2nuasknvr69&_ij_reload=RELOAD_ON_SAVE
+https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login/continue?client_id=47u7rlvrb9add08pfvu5532f7o&redirect_uri=http%3A%2F%2Flocalhost%3A63342%2FmultiModelChatbot%2Ffrontend%2Ftrial.html%3F_ijt%3Dqhgo1tvi5c5cno0go1dmd85agm%26_ij_reload%3DRELOAD_ON_SAVE&response_type=code&scope=email+openid+phone
+
+
+https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login?client_id=47u7rlvrb9add08pfvu5532f7&response_type=code&scope=email%20openid%20phone&redirect_uri=https%253A%252F%252Fd84l1y8p4kdic.cloudfront.net
+https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login?client_id=47u7rlvrb9add08pfvu5532f7&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fd84l1y8p4kdic.cloudfront.net
+https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login?client_id=47u7rlvrb9add08pfvu5532f7o&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fd84l1y8p4kdic.cloudfront.net

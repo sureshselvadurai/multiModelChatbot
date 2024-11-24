@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimodal Chatbot Login</title>
+    <script type="text/javascript">
+        // Function to handle the login redirection based on user type (Customer or Company)
+        function handleSignIn() {
+            // Get the selected user type
+            const userType = document.querySelector('input[name="userType"]:checked').id;
+            console.log("User Type Selected: ", userType);  // Log the user type (Customer/Company)
+
+            // Define the Cognito login URL with query parameters
+            const baseUrl = "https://us-east-1dpvcvfwfx.auth.us-east-1.amazoncognito.com/login";
+            const clientId = "7c7isph2n1fkg9aadidfrcfcmo"; // App client ID
+            const responseType = "code"; // We are using the authorization code flow
+            const scope = "email openid phone"; // Scopes for the authentication
+            const redirectUri = "https://uimmchatbot.s3.us-east-1.amazonaws.com/index.html"; // Redirect URI after login
+
+            // Construct the full URL for redirection
+            const loginUrl = `${baseUrl}?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+            // Redirect to the login URL
+            window.location.href = loginUrl; // Redirect to the Cognito login page
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-btn:hover {
+            background-color: #45a049;
+        }
+        .description {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Multimodal Chatbot</h1>
+    <p>Provide your product details, and customers can interact with a chatbot for support.</p>
+</header>
+
+<div class="container">
+    <h2>Login</h2>
+
+    <!-- User Type Selection (Customer or Company) -->
+    <div class="description">
+        <label><input type="radio" name="userType" id="customer" checked> Customer</label>
+        <label><input type="radio" name="userType" id="company"> Company</label>
+    </div>
+
+    <!-- Sign-In Button -->
+    <div class="button-container">
+        <button class="login-btn" onclick="handleSignIn()">Sign In with Cognito</button>
+    </div>
+</div>
+
+</body>
+</html>
