@@ -4,26 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multimodal Chatbot Login</title>
-    <script type="text/javascript">
-        // Function to handle the login redirection based on user type (Customer or Company)
-        function handleSignIn() {
-            // Get the selected user type
-            const userType = document.querySelector('input[name="userType"]:checked').id;
-            console.log("User Type Selected: ", userType);  // Log the user type (Customer/Company)
+    <script type="module">
+        import { UserManager } from 'https://cdn.jsdelivr.net/npm/oidc-client-ts@1.11.5/dist/oidc-client.min.js';
 
-            // Define the Cognito login URL with query parameters
-            const baseUrl = "https://us-east-1dpvcvfwfx.auth.us-east-1.amazoncognito.com/login";
-            const clientId = "7c7isph2n1fkg9aadidfrcfcmo"; // App client ID
-            const responseType = "code"; // We are using the authorization code flow
-            const scope = "email openid phone"; // Scopes for the authentication
-            const redirectUri = "https://uimmchatbot.s3.us-east-1.amazonaws.com/index.html"; // Redirect URI after login
+        // Cognito OIDC Configuration
+        const cognitoAuthConfig = {
+          authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_dpVcvfwFx",  // Your Cognito User Pool OIDC Endpoint
+          client_id: "7c7isph2n1fkg9aadidfrcfcmo",  // Your App Client ID
+          redirect_uri: "https://uimmchatbot.s3.us-east-1.amazonaws.com/index.html",  // Your Redirect URI
+          post_logout_redirect_uri: "https://uimmchatbot.s3.us-east-1.amazonaws.com/index.html",  // Your Logout URI
+          response_type: "code",
+          scope: "openid email profile"
+        };
 
-            // Construct the full URL for redirection
-            const loginUrl = `${baseUrl}?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+        // Create the UserManager instance
+        const userManager = new UserManager({
+          ...cognitoAuthConfig,
+        });
 
-            // Redirect to the login URL
-            window.location.href = loginUrl; // Redirect to the Cognito login page
-        }
+        // Handle Sign-In
+        async function signCognito() {
+            console.log('Signin clicked');
+            try {
+                // Debugging: Log the current redirect URI and Cognito settings
+                console.log("Redirecting to Cognito with the following configuration: ", cognitoAuthConfig);
+                await userManager.signinRedirect();  // Redirect to Cognito login page
+            } catch (error) {
+                console.error("Error during sign-in redirect: ", error);
+            }
+        };
+
+        // Handle the callback and show user info after successful login
+        userManager.signinCallback().then(function (user) {
+            console.log("User signed in:", user);
+            document.getElementById("email").textContent = user.profile?.email;
+            document.getElementById("access-token").textContent = user.access_token;
+            document.getElementById("id-token").textContent = user.id_token;
+            document.getElementById("refresh-token").textContent = user.refresh_token;
+        }).catch(function (error) {
+            console.error("Error during signinCallback", error);
+        });
+
+        // Handle Sign-Out
+        document.getElementById("signOut").addEventListener("click", async () => {
+            console.log("Logging out...");
+            await userManager.signoutRedirect();  // Redirect to Cognito logout endpoint
+        });
     </script>
 
     <style>
@@ -70,20 +96,37 @@
             margin: 20px 0;
             font-size: 18px;
         }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .info {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
         .button-container {
             text-align: center;
             margin-top: 20px;
         }
         .button-container button {
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #f44336;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         .button-container button:hover {
-            background-color: #45a049;
+            background-color: #e53935;
         }
     </style>
 </head>
@@ -105,7 +148,21 @@
 
     <!-- Sign-In Button -->
     <div class="button-container">
-        <button class="login-btn" onclick="handleSignIn()">Sign In with Cognito</button>
+        <button id="signIn" onclick="signCognito">Sign In with Cognito</button>
+    </div>
+
+    <!-- Display User Info After Sign-in -->
+    <div class="info">
+        <h3>Welcome Back!</h3>
+        <p>Hello: <pre id="email"></pre></p>
+        <p>Access token: <pre id="access-token"></pre></p>
+        <p>ID token: <pre id="id-token"></pre></p>
+        <p>Refresh token: <pre id="refresh-token"></pre></p>
+    </div>
+
+    <!-- Sign-Out Button -->
+    <div class="button-container">
+        <button id="signOut">Log out</button>
     </div>
 </div>
 
