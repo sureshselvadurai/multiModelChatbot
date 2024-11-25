@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Multimodal Chatbot</title>
+    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-auth-js"></script>
 
     <script>
 
@@ -20,11 +21,12 @@
             if (userType==="company"){
                 document.cookie = `section=section2; path=/; max-age=31536000`;
             }
-        const baseUrl = "https://us-east-1fqkcpapz2.auth.us-east-1.amazoncognito.com/login";
-        const clientId = "47u7rlvrb9add08pfvu5532f7o"; // App client ID
+
+        const baseUrl = "https://us-east-1ufowsma7a.auth.us-east-1.amazoncognito.com/login";
+        const clientId = "1ufk9s0et127kdesbrt6lu01ed"; // App client ID
         const responseType = "code"; // We are using the authorization code flow
         const scope = "email+openid+phone"; // Scopes for the authentication
-        const redirectUri = "http://localhost:63342/multiModelChatbot/frontend/trial.html?_ijt=me4agno4edmun0o2nuasknvr69&_ij_reload=RELOAD_ON_SAVE"; // Redirect URI after login
+        const redirectUri = "https%3A%2F%2Fsureshraja.live"; // Redirect URI after login
 
         // Construct the full URL for redirection
         const loginUrl = `${baseUrl}?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${(redirectUri)}`;
@@ -33,9 +35,30 @@
         window.location.href = loginUrl;
 
         }
-      function logout() {
-      document.cookie = "section=; path=/; max-age=0"; // Delete the cookie by setting its max-age to 0
-      loadSection(); // Reload the page to reflect the cleared cookie
+
+    function logout() {
+        // Clear the local cookies
+        document.cookie = "section=; path=/; max-age=0"; // Delete the cookie by setting its max-age to 0
+        loadSection(); // Reload the page to reflect the cleared cookie
+
+        // Cognito sign-out process
+        const poolData = {
+            UserPoolId: 'us-east-1_YourUserPoolId', // Your Cognito User Pool ID
+            ClientId: '1ufk9s0et127kdesbrt6lu01ed', // Your Cognito App Client ID
+        };
+
+        const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+        const cognitoUser = userPool.getCurrentUser();
+
+        if (cognitoUser != null) {
+            cognitoUser.signOut(); // Sign out from Cognito
+            console.log("User successfully logged out from Cognito.");
+        } else {
+            console.log("No user currently signed in to Cognito.");
+        }
+
+        // Optionally, redirect to a different page after logout, like the homepage or login page
+        window.location.href = "https://yourhomepageurl.com";
     }
 
     </script>
@@ -73,7 +96,7 @@
           background-color: #fff;
           border-radius: 10px;
           overflow: hidden;
-          height:630px;
+          height:570px;
         }
         .chat-box {
           flex: 1;
@@ -339,6 +362,7 @@
             <button class="login-btn" onclick="handleSignIn()">Sign In with Cognito</button>
         </div>
     </div>
+
 </div>
 
 
@@ -473,6 +497,9 @@
                 </div>
             </main>
         </div>
+    </div>
+    <div class="button-container">
+    <button onclick="logout()">Logout (Clear Cookie)</button>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
@@ -741,10 +768,9 @@
             <label for="fileInput">Upload Files</label>
         </div>
     </div>
-
-    <footer>
-        &copy; 2024 Chatbot Inc.
-    </footer>
+    <div class="button-container">
+    <button onclick="logout()">Logout (Clear Cookie)</button>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
@@ -1102,9 +1128,7 @@
 <!--    <button onclick="setSectionCookie('section2')">Show Section 2</button>-->
 <!--    <button onclick="setSectionCookie('section3')">Show Section 3</button>-->
 <!--</div>-->
-<div class="button-container">
-    <button onclick="logout()">Logout (Clear Cookie)</button>
-</div>
+
 
 
 <script>
