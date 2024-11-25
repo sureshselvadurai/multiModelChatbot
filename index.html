@@ -57,9 +57,8 @@
             console.log("No user currently signed in to Cognito.");
         }
 
-        // Optionally, redirect to a different page after logout, like the homepage or login page
-        window.location.href = "https://yourhomepageurl.com";
     }
+
 
     </script>
 
@@ -765,7 +764,9 @@
             <input type="text" id="userInput" placeholder="Type a message..."/>
             <button id="sendMessage" onclick="sendMessage()">Send</button>
             <input type="file" id="fileInput" multiple onchange="handleFileInput()"/>
+            <button id="start-btn">Start Voice Input</button>
             <label for="fileInput">Upload Files</label>
+
         </div>
     </div>
     <div class="button-container">
@@ -1119,6 +1120,48 @@
           const data = await response.json();
           return data;
         }
+
+
+            const isSpeechRecognitionSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+
+    if (!isSpeechRecognitionSupported) {
+            alert('Your browser does not support speech recognition. Please try with a modern browser.');
+        }
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US'; // Set the language for speech recognition
+        recognition.continuous = true; // Keep recognition going even after pauses
+        recognition.interimResults = true; // Show interim results while speech is being processed
+
+        // Get DOM elements
+        const startBtn = document.getElementById('start-btn');
+        const userInput = document.getElementById('userInput');
+
+        // Start recording when the button is clicked
+        startBtn.addEventListener('click', () => {
+            recognition.start();
+            userInput.placeholder = 'Listening...'; // Show listening text
+        });
+
+        // Capture the results of the speech recognition
+        recognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            userInput.value = transcript; // Add the transcribed text to the input field
+        };
+
+        // Handle errors
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error', event.error);
+            userInput.placeholder = 'Error in speech recognition';
+        };
+
+        // Reset the transcription on recognition end
+        recognition.onend = () => {
+            userInput.placeholder = 'You can speak now or type...';
+        };
     </script>
 </div>
 
