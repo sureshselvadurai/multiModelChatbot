@@ -6,6 +6,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Multimodal Chatbot</title>
     <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-auth-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@5.0.3/dist/amazon-cognito-identity.min.js"></script>
 
     <script>
 
@@ -488,7 +489,7 @@
                                 <input type="file" id="predictInput" class="form-control-file" accept="image/*">
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-primary btn-block" onclick="predictImage()">Predict</button>
+                                <button class="btn btn-primary btn-block" onclick="predictImageCom()">Predict</button>
                             </div>
                         </div>
                         <div id="predictionResult" class="status alert alert-secondary mt-3" role="alert"></div>
@@ -701,7 +702,7 @@
             }
         }
 
-        async function predictImage() {
+        async function predictImageCom() {
             const file = document.getElementById('predictInput').files[0];
             if (!file) {
                 alert('Please select an image to predict.');
