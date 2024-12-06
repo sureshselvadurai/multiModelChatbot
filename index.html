@@ -865,6 +865,7 @@
         }
         return predictions;
       }
+
       function dataURLtoBlob(dataURL) {
         const byteString = atob(dataURL.split(',')[1]); // Decode base64
         const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0]; // Get MIME type
