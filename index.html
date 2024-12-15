@@ -889,7 +889,6 @@
             if (!response.ok) {
               throw new Error('Prediction failed');
             }
-
             const responsep = await fetch(predictImageUrl, { method: 'POST' });
             if (!responsep.ok) {
               throw new Error('Prediction failed');
@@ -910,7 +909,6 @@
 
         async function uploadFramesToLambda(frames) {
           const apiUrl = 'https://your-api-gateway-url.amazonaws.com/your-endpoint';
-
           try {
             // Send frames as a JSON payload
             const response = await fetch(apiUrl, {
