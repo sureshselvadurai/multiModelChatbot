@@ -918,7 +918,6 @@
               },
               body: JSON.stringify(frames)  // Send frames array as JSON
             });
-
             const data = await response.json();
             console.log('Frames upload response:', data);
             return data; // Return response for further processing if needed
