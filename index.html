@@ -938,7 +938,6 @@
           pdfFiles['pdf_files'].forEach(pdf => {
             catalogInfo += `Catalog File: ${pdf.file_name}\nContent: ${pdf.content}\n\n`;
           });
-
           // Process image predictions
           let imagePredictions = [];
           const imagePromises = filesToSend.map(async (file) => {
