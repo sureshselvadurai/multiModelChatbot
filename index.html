@@ -950,7 +950,6 @@
             }
           });
 
-          // Process video predictions (split frames and predict)
           let videoPredictions = [];
           const videoPromises = filesToSend.map(async (file) => {
             if (file.type.startsWith('video')) {
