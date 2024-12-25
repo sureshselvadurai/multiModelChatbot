@@ -1113,7 +1113,6 @@
     if (!isSpeechRecognitionSupported) {
             alert('Your browser does not support speech recognition. Please try with a modern browser.');
         }
-
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'en-US'; // Set the language for speech recognition
         recognition.continuous = true; // Keep recognition going even after pauses
