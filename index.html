@@ -964,7 +964,6 @@
             }
           });
 
-          // Wait for all predictions to complete
           await Promise.all([...imagePromises, ...videoPromises]);
 
           // Organize data to send to API
@@ -977,7 +976,6 @@
 
           console.log("dataToSend: ",dataToSend)
 
-          // Send data to the API
           let reply = "System Down. Try after sometime";
           try {
             const response = await fetch('https://1oh2gyhifc.execute-api.us-east-1.amazonaws.com/default/interfaceGemini', {
