@@ -1108,9 +1108,7 @@
           const data = await response.json();
           return data;
         }
-
-
-            const isSpeechRecognitionSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+        const isSpeechRecognitionSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
 
     if (!isSpeechRecognitionSupported) {
             alert('Your browser does not support speech recognition. Please try with a modern browser.');
